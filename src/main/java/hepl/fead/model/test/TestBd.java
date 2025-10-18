@@ -1,70 +1,114 @@
 package hepl.fead.model.test;
 
+import hepl.fead.model.bd.ConnectBD;
 import java.sql.*;
 
+/**
+ * Test de connexion basique utilisant la classe ConnectBD
+ * Affiche les données de la table 'patient'
+ */
 public class TestBd {
 
     public static void main(String[] args) {
-        // Informations de connexion
-        String url = "jdbc:mysql://172.20.10.4:3306/PourStudent"; // ✅ ajout explicite du port 3306
-        String user = "Student";
-        String password = "PassStudent1_";
+        System.out.println("╔════════════════════════════════════════════════════════╗");
+        System.out.println("║     TEST DE CONNEXION - Utilisation de ConnectBD      ║");
+        System.out.println("╚════════════════════════════════════════════════════════╝\n");
 
         try {
-            // Chargement du driver MySQL
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            System.out.println("✅ Driver MySQL chargé avec succès");
+            // Utiliser ConnectBD pour obtenir la connexion
+            // Cela initialisera automatiquement la base de données si nécessaire
+            System.out.println("📡 Connexion via ConnectBD.getConnection()...");
+            Connection con = ConnectBD.getConnection();
+            
+            if (con != null && !con.isClosed()) {
+                System.out.println("✅ Connexion établie avec succès");
+                System.out.println("   Base de données: " + con.getCatalog());
+                System.out.println("   Utilisateur: " + con.getMetaData().getUserName());
+                System.out.println();
 
-            // Connexion à la base de données
-            try (Connection con = DriverManager.getConnection(url, user, password)) {
-                System.out.println("✅ Connexion à la base 'PourStudent' établie");
-
-                // Création d'un Statement pour exécuter une requête SELECT
+                // TEST 1: Afficher toutes les données de la table 'patient'
+                System.out.println("📊 TEST 1: Lire toutes les données de la table 'patient'");
+                System.out.println("----------------------------------------------------------");
                 try (Statement stmt = con.createStatement()) {
-                    String sql = "SELECT * FROM patients";
-                    System.out.println("➡️  Exécution de la requête : " + sql);
+                    String sql = "SELECT * FROM patient";
+                    System.out.println("➡️  Requête: " + sql + "\n");
 
                     try (ResultSet rs = stmt.executeQuery(sql)) {
-                        System.out.println("✅ Requête SELECT exécutée avec succès");
-
                         // Affichage des métadonnées : nombre et noms des colonnes
                         ResultSetMetaData metaData = rs.getMetaData();
                         int columnCount = metaData.getColumnCount();
-                        System.out.println("Nombre de colonnes : " + columnCount);
 
                         // Afficher les noms de colonnes
+                        System.out.println("Colonnes (" + columnCount + "):");
                         for (int j = 1; j <= columnCount; j++) {
                             System.out.print(metaData.getColumnName(j) + "\t");
                         }
-                        System.out.println("\n----------------------------------");
+                        System.out.println("\n" + "-".repeat(80));
 
                         // Afficher les données ligne par ligne
+                        int rowCount = 0;
                         while (rs.next()) {
+                            rowCount++;
                             for (int j = 1; j <= columnCount; j++) {
                                 System.out.print(rs.getObject(j) + "\t");
                             }
                             System.out.println();
                         }
+                        
+                        if (rowCount == 0) {
+                            System.out.println("(Aucune donnée trouvée)");
+                        }
+                        System.out.println("\n✅ " + rowCount + " ligne(s) affichée(s)");
                     }
                 }
 
-                // Exemple de requête : compter le nombre de tuples
-                String countQuery = "SELECT COUNT(*) FROM patients";
-                try (Statement stmtCount = con.createStatement();
-                     ResultSet rsc = stmtCount.executeQuery(countQuery)) {
-
-                    if (rsc.next()) {
-                        int nbre = rsc.getInt(1);
-                        System.out.println("\n✅ Nombre total d’enregistrements dans 'patients' : " + nbre);
+                // TEST 2: Compter le nombre total d'enregistrements
+                System.out.println("\n📊 TEST 2: Statistiques de la base de données");
+                System.out.println("----------------------------------------------------------");
+                
+                String[] tables = {"patient", "doctor", "specialties", "consultations"};
+                for (String table : tables) {
+                    try (Statement stmtCount = con.createStatement();
+                         ResultSet rsc = stmtCount.executeQuery("SELECT COUNT(*) FROM " + table)) {
+                        
+                        if (rsc.next()) {
+                            int count = rsc.getInt(1);
+                            System.out.printf("  %-20s : %d enregistrement(s)%n", table, count);
+                        }
+                    } catch (SQLException e) {
+                        System.out.printf("  %-20s : Table non trouvée ou erreur%n", table);
                     }
                 }
 
-            } // La connexion est automatiquement fermée ici
+                // TEST 3: Afficher des informations sur la connexion
+                System.out.println("\n📊 TEST 3: Informations de connexion");
+                System.out.println("----------------------------------------------------------");
+                DatabaseMetaData dbMeta = con.getMetaData();
+                System.out.println("  Produit: " + dbMeta.getDatabaseProductName());
+                System.out.println("  Version: " + dbMeta.getDatabaseProductVersion());
+                System.out.println("  Driver: " + dbMeta.getDriverName());
+                System.out.println("  Version du driver: " + dbMeta.getDriverVersion());
+                
+                System.out.println("\n╔════════════════════════════════════════════════════════╗");
+                System.out.println("║              TEST TERMINÉ AVEC SUCCÈS ✅               ║");
+                System.out.println("╚════════════════════════════════════════════════════════╝");
+                
+            } else {
+                System.err.println("❌ Impossible d'obtenir une connexion valide");
+            }
 
-        } catch (ClassNotFoundException ex) {
-            System.err.println("❌ Erreur : driver MySQL non trouvé - " + ex.getMessage());
         } catch (SQLException ex) {
-            System.err.println("❌ Erreur SQL : " + ex.getMessage());
+            System.err.println("\n❌ ERREUR SQL");
+            System.err.println("----------------------------------------------------------");
+            System.err.println("Message: " + ex.getMessage());
+            System.err.println("Code erreur: " + ex.getErrorCode());
+            System.err.println("État SQL: " + ex.getSQLState());
+            ex.printStackTrace();
+        } catch (Exception ex) {
+            System.err.println("\n❌ ERREUR GÉNÉRALE");
+            System.err.println("----------------------------------------------------------");
+            System.err.println("Message: " + ex.getMessage());
+            ex.printStackTrace();
         }
     }
 }
