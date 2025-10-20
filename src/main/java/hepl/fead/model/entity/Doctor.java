@@ -7,6 +7,7 @@ public class Doctor implements Entity {
     private Integer specialite_id ;
     private String last_name ;
     private String first_name ;
+    private String password ;
 
     public Doctor(){
 
@@ -16,6 +17,14 @@ public class Doctor implements Entity {
         this.specialite_id = specialite_id;
         this.last_name = last_name;
         this.first_name = first_name;
+    }
+    
+    public Doctor(Integer id, Integer specialite_id, String last_name, String first_name, String password) {
+        this.id = id;
+        this.specialite_id = specialite_id;
+        this.last_name = last_name;
+        this.first_name = first_name;
+        this.password = password;
     }
     public Integer getId() {
         return id;
@@ -40,6 +49,12 @@ public class Doctor implements Entity {
     }
     public void setFirst_name(String first_name) {
         this.first_name = first_name;
+    }
+    public String getPassword() {
+        return password;
+    }
+    public void setPassword(String password) {
+        this.password = password;
     }
     @Override
     public String toString() {

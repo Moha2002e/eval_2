@@ -22,6 +22,22 @@
             <artifactId>mysql-connector-j</artifactId>
             <version>${mysql.connector.version}</version>
         </dependency>
+        
+        <!-- JUnit 5 pour les tests unitaires -->
+        <dependency>
+            <groupId>org.junit.jupiter</groupId>
+            <artifactId>junit-jupiter</artifactId>
+            <version>5.10.1</version>
+            <scope>test</scope>
+        </dependency>
+        
+        <!-- JUnit Platform Suite pour les suites de tests -->
+        <dependency>
+            <groupId>org.junit.platform</groupId>
+            <artifactId>junit-platform-suite-api</artifactId>
+            <version>1.10.1</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -42,7 +58,7 @@
                 <artifactId>exec-maven-plugin</artifactId>
                 <version>3.5.1</version>
                 <configuration>
-                    <mainClass>hepl.fead.model.test.Test_DAO_Consultation</mainClass>
+                    <mainClass>hepl.fead.adminclient.AdminClient</mainClass>
                 </configuration>
             </plugin>
         </plugins>

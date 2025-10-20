@@ -6,42 +6,37 @@ import hepl.fead.model.entity.Doctor;
 import hepl.fead.model.entity.Speciality;
 import hepl.fead.model.entity.Consultation;
 
-/**
- * Démonstration de l'utilisation de l'interface Entity
- */
+import static hepl.fead.model.test.Const_Test.*;
+
 public class Test_Entity_Interface {
     public static void main(String[] args) {
-        System.out.println("╔════════════════════════════════════════════════════════╗");
-        System.out.println("║     TEST DE L'INTERFACE ENTITY                         ║");
-        System.out.println("╚════════════════════════════════════════════════════════╝\n");
+        System.out.println(SEPARATEUR);
+        System.out.println(String.format(FORMAT_TITRE, TEST_ENTITY_INTERFACE));
+        System.out.println(SEPARATEUR + "\n");
 
-        // Créer un patient sans ID (nouveau)
         Patient patient = new Patient();
-        patient.setFirst_name("Jean");
-        patient.setLast_name("Dupont");
+        patient.setFirst_name(PATIENT_PRENOM);
+        patient.setLast_name(PATIENT_NOM);
         
-        System.out.println("📋 TEST 1: Vérifier si une entité est nouvelle");
-        System.out.println("------------------------------------------");
-        System.out.println("Patient créé: " + patient.getFirst_name() + " " + patient.getLast_name());
-        System.out.println("ID: " + patient.getId());
-        System.out.println("Est nouveau (pas encore en base) ? " + patient.isNew());
-        System.out.println("Est persisté (en base) ? " + patient.isPersisted());
+        System.out.println(String.format(FORMAT_TEST, 1, ENTITY_NOUVEAU));
+        System.out.println(SEPARATEUR_COURT);
+        System.out.println(String.format(FORMAT_NOM_PRENOM, patient.getFirst_name(), patient.getLast_name()));
+        System.out.println(String.format(FORMAT_DETAIL, ENTITY_EST_NOUVEAU, patient.isNew()));
+        System.out.println(String.format(FORMAT_DETAIL, ENTITY_EST_PERSISTE, patient.isPersisted()));
 
-        // Simuler l'insertion en base
         patient.setId(42);
         
-        System.out.println("\n📋 TEST 2: Après insertion en base");
-        System.out.println("------------------------------------------");
-        System.out.println("ID assigné: " + patient.getId());
-        System.out.println("Est nouveau ? " + patient.isNew());
-        System.out.println("Est persisté ? " + patient.isPersisted());
+        System.out.println("\n" + String.format(FORMAT_TEST, 2, ENTITY_PERSISTE));
+        System.out.println(SEPARATEUR_COURT);
+        System.out.println(String.format(FORMAT_ID, patient.getId()));
+        System.out.println(String.format(FORMAT_DETAIL, ENTITY_EST_NOUVEAU, patient.isNew()));
+        System.out.println(String.format(FORMAT_DETAIL, ENTITY_EST_PERSISTE, patient.isPersisted()));
 
-        // Méthode générique qui accepte n'importe quelle entité
-        System.out.println("\n📋 TEST 3: Méthode générique avec Entity");
-        System.out.println("------------------------------------------");
+        System.out.println("\n" + String.format(FORMAT_TEST, 3, "Methode generique"));
+        System.out.println(SEPARATEUR_COURT);
         
-        Doctor doctor = new Doctor(10, 1, "Martin", "Dr. Pierre");
-        Speciality speciality = new Speciality(5, "Cardiologie");
+        Doctor doctor = new Doctor(10, 1, DOCTOR_NOM_2, DOCTOR_PRENOM_2);
+        Speciality speciality = new Speciality(5, SPECIALTY_NOM);
         Consultation consultation = new Consultation();
         consultation.setId(99);
         
@@ -50,49 +45,14 @@ public class Test_Entity_Interface {
         afficherInfoEntity(speciality);
         afficherInfoEntity(consultation);
 
-        // Travailler avec une liste d'entités hétérogènes
-        System.out.println("\n📋 TEST 4: Liste polymorphique d'entités");
-        System.out.println("------------------------------------------");
-        
-        Entity[] entities = {patient, doctor, speciality, consultation};
-        int nouvelles = 0;
-        int persistees = 0;
-        
-        for (Entity entity : entities) {
-            if (entity.isNew()) {
-                nouvelles++;
-            } else {
-                persistees++;
-            }
-        }
-        
-        System.out.println("Total d'entités: " + entities.length);
-        System.out.println("Nouvelles (pas en base): " + nouvelles);
-        System.out.println("Persistées (en base): " + persistees);
-
-        System.out.println("\n╔════════════════════════════════════════════════════════╗");
-        System.out.println("║     AVANTAGES DE L'INTERFACE ENTITY                    ║");
-        System.out.println("╚════════════════════════════════════════════════════════╝");
-        System.out.println("\n✅ Avantages:");
-        System.out.println("   1. Méthodes communes pour toutes les entités");
-        System.out.println("   2. Polymorphisme - traiter toutes les entités de la même façon");
-        System.out.println("   3. Vérification facile si nouvelle ou persistée");
-        System.out.println("   4. Facilite la création de DAO générique");
-        System.out.println("   5. Code plus maintenable et extensible");
-        System.out.println("\n💡 Utilisation future possible:");
-        System.out.println("   - Créer un GenericDAO<T extends Entity>");
-        System.out.println("   - Validation automatique basée sur isPersisted()");
-        System.out.println("   - Audit trail (qui a créé/modifié quoi)");
-        System.out.println("   - Cache d'entités basé sur l'ID");
+        System.out.println("\n" + SEPARATEUR);
+        System.out.println(String.format(FORMAT_TITRE, FIN_TESTS));
+        System.out.println(SEPARATEUR);
     }
 
-    /**
-     * Méthode générique qui fonctionne avec n'importe quelle entité
-     */
     private static void afficherInfoEntity(Entity entity) {
         String type = entity.getClass().getSimpleName();
-        String statut = entity.isPersisted() ? "✅ Persisté" : "🆕 Nouveau";
-        System.out.println("  " + type + " [ID: " + entity.getId() + "] - " + statut);
+        String statut = entity.isPersisted() ? ENTITY_PERSISTE : ENTITY_NOUVEAU;
+        System.out.println(String.format("  %s [%s] - %s", type, String.format(FORMAT_ID, entity.getId()), statut));
     }
 }
-

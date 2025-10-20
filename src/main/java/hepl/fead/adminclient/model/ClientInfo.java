@@ -1,4 +1,4 @@
-package hepl.fead.model.adminclient;
+package hepl.fead.adminclient.model;
 
 /**
  * Classe représentant les informations d'un client connecté
@@ -9,7 +9,7 @@ public class ClientInfo {
     private String lastName;
     private String firstName;
     private int patientId;
-
+    
     /**
      * Constructeur avec tous les paramètres
      * @param ipAddress Adresse IP du client
@@ -23,24 +23,24 @@ public class ClientInfo {
         this.firstName = firstName;
         this.patientId = patientId;
     }
-
+    
     // Getters
     public String getIpAddress() {
         return ipAddress;
     }
-
+    
     public String getLastName() {
         return lastName;
     }
-
+    
     public String getFirstName() {
         return firstName;
     }
-
+    
     public int getPatientId() {
         return patientId;
     }
-
+    
     /**
      * Représentation textuelle de l'objet
      * @return String formatée pour l'affichage
@@ -49,7 +49,7 @@ public class ClientInfo {
     public String toString() {
         return String.format("%s - %s %s (ID: %d)", ipAddress, firstName, lastName, patientId);
     }
-
+    
     /**
      * Comparaison d'égalité basée sur l'ID du patient
      * @param obj Objet à comparer
@@ -62,7 +62,7 @@ public class ClientInfo {
         ClientInfo that = (ClientInfo) obj;
         return patientId == that.patientId;
     }
-
+    
     /**
      * Hash code basé sur l'ID du patient
      * @return Hash code de l'objet

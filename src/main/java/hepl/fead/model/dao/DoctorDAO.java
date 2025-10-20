@@ -35,6 +35,7 @@ public class DoctorDAO {
                 doctor.setFirst_name(rs.getString("first_name"));
                 doctor.setLast_name(rs.getString("last_name"));
                 doctor.setSpecialite_id(rs.getInt("specialite_id"));
+                doctor.setPassword(rs.getString("password"));
                 rs.close();
                 ps.close();
                 return doctor;
@@ -94,6 +95,7 @@ public class DoctorDAO {
                 doctor.setFirst_name(rs.getString("first_name"));
                 doctor.setLast_name(rs.getString("last_name"));
                 doctor.setSpecialite_id(rs.getInt("specialite_id"));
+                doctor.setPassword(rs.getString("password"));
                 doctors.add(doctor);
             }
 
@@ -113,20 +115,22 @@ public class DoctorDAO {
             }
 
             if (doctor.getId() != null) { // Update
-                String query = "UPDATE doctor SET first_name = ?, last_name = ?, specialite_id = ? WHERE id = ?";
+                String query = "UPDATE doctor SET first_name = ?, last_name = ?, specialite_id = ?, password = ? WHERE id = ?";
                 PreparedStatement ps = ConnectBD.getConnection().prepareStatement(query);
                 ps.setString(1, doctor.getFirst_name());
                 ps.setString(2, doctor.getLast_name());
                 ps.setInt(3, doctor.getSpecialite_id());
-                ps.setInt(4, doctor.getId());
+                ps.setString(4, doctor.getPassword());
+                ps.setInt(5, doctor.getId());
                 ps.executeUpdate();
                 ps.close();
             } else { // Insert
-                String query = "INSERT INTO doctor (first_name, last_name, specialite_id) VALUES (?, ?, ?)";
+                String query = "INSERT INTO doctor (first_name, last_name, specialite_id, password) VALUES (?, ?, ?, ?)";
                 PreparedStatement ps = ConnectBD.getConnection().prepareStatement(query, PreparedStatement.RETURN_GENERATED_KEYS);
                 ps.setString(1, doctor.getFirst_name());
                 ps.setString(2, doctor.getLast_name());
                 ps.setInt(3, doctor.getSpecialite_id());
+                ps.setString(4, doctor.getPassword());
                 ps.executeUpdate();
 
                 ResultSet rs = ps.getGeneratedKeys();

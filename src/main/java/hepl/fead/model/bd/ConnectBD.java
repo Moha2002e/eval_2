@@ -6,6 +6,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+import static hepl.fead.model.bd.Const_BD.ERREUR_CONNEXION;
+
 public class ConnectBD {
 
     private static Connection conn;
@@ -29,7 +31,7 @@ public class ConnectBD {
                 conn = DriverManager.getConnection(sCon, sUser, sPass);
 
             } catch (ClassNotFoundException | SQLException e) {
-                throw new RuntimeException("Erreur lors de la connexion à la base de données", e);
+                throw new RuntimeException(ERREUR_CONNEXION, e);
             }
         }
         return conn; //  connexion réussis,  du return
