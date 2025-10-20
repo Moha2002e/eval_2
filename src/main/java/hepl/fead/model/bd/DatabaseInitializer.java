@@ -118,6 +118,7 @@ public class DatabaseInitializer {
                     id INT AUTO_INCREMENT PRIMARY KEY,
                     first_name VARCHAR(100) NOT NULL,
                     last_name VARCHAR(100) NOT NULL,
+                    password VARCHAR(100) NOT NULL,
                     specialite_id INT,
                     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
@@ -222,10 +223,10 @@ public class DatabaseInitializer {
             LOGGER.info("📝 Insertion de quelques docteurs de test...");
             
             String[] doctors = {
-                "INSERT INTO doctor (first_name, last_name, specialite_id) VALUES ('Dr. Antoine', 'Rousseau', 1)",
-                "INSERT INTO doctor (first_name, last_name, specialite_id) VALUES ('Dr. Claire', 'Moreau', 2)",
-                "INSERT INTO doctor (first_name, last_name, specialite_id) VALUES ('Dr. Thomas', 'Lambert', 6)",
-                "INSERT INTO doctor (first_name, last_name, specialite_id) VALUES ('Dr. Isabelle', 'Petit', 3)"
+                "INSERT INTO doctor (first_name, last_name, specialite_id , password) VALUES ('Dr. Antoine', 'Rousseau', 1,'test')",
+                "INSERT INTO doctor (first_name, last_name, specialite_id,password) VALUES ('Dr. Claire', 'Moreau', 2,'test')",
+                "INSERT INTO doctor (first_name, last_name, specialite_id,password) VALUES ('Dr. Thomas', 'Lambert', 6,'test')",
+                "INSERT INTO doctor (first_name, last_name, specialite_id,password) VALUES ('Dr. Isabelle', 'Petit', 3,'test')"
             };
 
             for (String insertQuery : doctors) {
