@@ -1,5 +1,7 @@
 package hepl.fead.model.entity;
 
+import java.time.OffsetDateTime;
+
 public class Consultation implements Entity {
     private static final long serialVersionUID = 1L;
     private Integer id ;
@@ -8,6 +10,10 @@ public class Consultation implements Entity {
     private String date ;
     private String hour ;
     private String reason ;
+    // Additional patient info for UI convenience
+    private String patient_first_name;
+    private String patient_last_name;
+    private String patient_birth_date;
 
     public Consultation() {
 
@@ -45,6 +51,18 @@ public class Consultation implements Entity {
         return reason;
     }
 
+    public String getPatient_first_name() {
+        return patient_first_name;
+    }
+
+    public String getPatient_last_name() {
+        return patient_last_name;
+    }
+
+    public String getPatient_birth_date() {
+        return patient_birth_date;
+    }
+
     public void setId(Integer id) {
         this.id = id;
     }
@@ -55,6 +73,18 @@ public class Consultation implements Entity {
 
     public void setPatient_id(Integer patient_id) {
         this.patient_id = patient_id;
+    }
+
+    public void setPatient_first_name(String patient_first_name) {
+        this.patient_first_name = patient_first_name;
+    }
+
+    public void setPatient_last_name(String patient_last_name) {
+        this.patient_last_name = patient_last_name;
+    }
+
+    public void setPatient_birth_date(String patient_birth_date) {
+        this.patient_birth_date = patient_birth_date;
     }
 
     public void setDate(String date) {
@@ -79,5 +109,22 @@ public class Consultation implements Entity {
                 ", hour='" + hour + '\'' +
                 ", reason='" + reason + '\'' +
                 '}';
+    }
+
+    public OffsetDateTime getDateTime() {
+        try {
+            java.time.LocalDate ld = java.time.LocalDate.parse(this.date);
+            java.time.LocalTime lt = this.hour == null || this.hour.isEmpty() ? java.time.LocalTime.MIDNIGHT : java.time.LocalTime.parse(this.hour);
+            java.time.LocalDateTime ldt = java.time.LocalDateTime.of(ld, lt);
+            java.time.ZoneOffset offset = java.time.ZoneId.systemDefault().getRules().getOffset(ldt);
+            return java.time.OffsetDateTime.of(ldt, offset);
+        } catch (Exception e) {
+            // fallback: try parsing as full OffsetDateTime, or current moment
+            try {
+                return OffsetDateTime.parse(date);
+            } catch (Exception ex) {
+                return OffsetDateTime.now();
+            }
+        }
     }
 }

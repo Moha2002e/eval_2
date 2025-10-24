@@ -166,4 +166,39 @@ public class DoctorDAO {
             }
         }
     }
+
+    public Doctor login(String login, String password) {
+        if (login == null || login.isEmpty() || password == null) {
+            return null;
+        }
+
+        try {
+            String query = "SELECT * FROM doctor WHERE (first_name = ? OR last_name = ? OR CONCAT(first_name, ' ', last_name) = ?) AND password = ?";
+            PreparedStatement ps = ConnectBD.getConnection().prepareStatement(query);
+            ps.setString(1, login);
+            ps.setString(2, login);
+            ps.setString(3, login);
+            ps.setString(4, password);
+
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                Doctor doctor = new Doctor();
+                doctor.setId(rs.getInt("id"));
+                doctor.setFirst_name(rs.getString("first_name"));
+                doctor.setLast_name(rs.getString("last_name"));
+                doctor.setSpecialite_id(rs.getInt("specialite_id"));
+                doctor.setPassword(rs.getString("password"));
+                rs.close();
+                ps.close();
+                return doctor;
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            Logger.getLogger(DoctorDAO.class.getName()).warning(e.getMessage());
+        }
+
+        return null;
+    }
 }

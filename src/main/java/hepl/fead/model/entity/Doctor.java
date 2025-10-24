@@ -61,8 +61,13 @@ public class Doctor implements Entity {
         // Pour l’affichage dans les listes, retourner simplement le nom complet
         String ln = last_name != null ? last_name : "";
         String fn = first_name != null ? first_name : "";
-        return ln + (fn.isBlank() ? "" : (" " + fn));
+        return ln + (fn.trim().isEmpty() ? "" : (" " + fn));
     }
 
 
+    public String getName() {
+        String ln = last_name != null ? last_name : "";
+        String fn = first_name != null ? first_name : "";
+        return (ln + (fn.trim().isEmpty() ? "" : (" " + fn))).trim();
+    }
 }

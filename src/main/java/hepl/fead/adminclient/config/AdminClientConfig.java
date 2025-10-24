@@ -13,7 +13,7 @@ public class AdminClientConfig {
     /**
      * Adresse IP par défaut du serveur C
      */
-    public static final String DEFAULT_SERVER_HOST = "172.20.10.4";
+    public static final String DEFAULT_SERVER_HOST = "192.168.0.16";
     
     /**
      * Port par défaut du serveur C

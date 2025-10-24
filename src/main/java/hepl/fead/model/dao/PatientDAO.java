@@ -148,6 +148,18 @@ public class PatientDAO {
         }
     }
 
+    /**
+     * Convenience method used by server protocol to quickly add a patient
+     * and return the generated id.
+     */
+    public int addPatient(String lastName, String firstName) {
+        Patient p = new Patient();
+        p.setFirst_name(firstName);
+        p.setLast_name(lastName);
+        save(p);
+        return p.getId() == null ? -1 : p.getId();
+    }
+
     //suppression
     public void delete(Patient patient) {
         if (patient != null && patient.getId() != null) {
