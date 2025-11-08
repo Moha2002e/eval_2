@@ -5,6 +5,7 @@ import hepl.fead.model.entity.Consultation;
 import javax.swing.table.AbstractTableModel;
 import java.time.format.DateTimeFormatter;
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 public class ConsultationTableModel extends AbstractTableModel {
@@ -58,7 +59,11 @@ public class ConsultationTableModel extends AbstractTableModel {
         }
     }
     public void setConsultations(List<Consultation> consultations) {
-        this.consultations = consultations;
+        // Trier les consultations par date et heure (du plus récent au plus ancien)
+        if (consultations != null) {
+            consultations.sort(Comparator.comparing(Consultation::getDateTime).reversed());
+        }
+        this.consultations = consultations != null ? consultations : new ArrayList<>();
         fireTableDataChanged();
     }
     public Consultation getConsultationAt(int row) {

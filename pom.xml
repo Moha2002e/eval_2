@@ -1,7 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0"
          xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>org.example</groupId>
@@ -16,33 +17,50 @@
     </properties>
 
     <dependencies>
-        <!-- Driver MySQL JDBC -->
+
+        <!-- MySQL JDBC -->
         <dependency>
             <groupId>com.mysql</groupId>
             <artifactId>mysql-connector-j</artifactId>
             <version>${mysql.connector.version}</version>
         </dependency>
-        
-        <!-- JUnit 5 pour les tests unitaires -->
+
+        <!-- JUnit 5 -->
         <dependency>
             <groupId>org.junit.jupiter</groupId>
             <artifactId>junit-jupiter</artifactId>
             <version>5.10.1</version>
             <scope>test</scope>
         </dependency>
-        
-        <!-- JUnit Platform Suite pour les suites de tests -->
+
+        <!-- JUnit Suite API -->
         <dependency>
             <groupId>org.junit.platform</groupId>
             <artifactId>junit-platform-suite-api</artifactId>
             <version>1.10.1</version>
             <scope>test</scope>
         </dependency>
+
+        <!-- FlatLaf Look & Feel (base) -->
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf</artifactId>
+            <version>3.3</version>
+        </dependency>
+
+        <!-- FlatLaf Extras (icônes SVG, reveal password, animations, style avancé) -->
+        <dependency>
+            <groupId>com.formdev</groupId>
+            <artifactId>flatlaf-extras</artifactId>
+            <version>3.3</version>
+        </dependency>
+
     </dependencies>
 
     <build>
         <plugins>
-            <!-- Compiler Java 25 -->
+
+            <!-- Compiler Java -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -52,7 +70,7 @@
                 </configuration>
             </plugin>
 
-            <!-- Exécuter la classe main avec toutes les dépendances sur le classpath -->
+            <!-- Lancement -->
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
                 <artifactId>exec-maven-plugin</artifactId>
@@ -61,6 +79,8 @@
                     <mainClass>hepl.fead.adminclient.AdminClient</mainClass>
                 </configuration>
             </plugin>
+
         </plugins>
     </build>
+
 </project>

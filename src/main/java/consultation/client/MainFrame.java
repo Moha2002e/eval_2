@@ -44,18 +44,21 @@ public class MainFrame extends JFrame {
         tabbedPane.addTab("Patients", patientScroll);
         JPanel buttonPanel = new JPanel();
         JButton btnRefresh = new JButton("Actualiser");
+        JButton btnSearch = new JButton("Rechercher");
         JButton btnCreate = new JButton("Créer consultation");
         JButton btnAddPatient = new JButton("Ajouter patient");
         JButton btnModify = new JButton("Modifier");
         JButton btnDelete = new JButton("Supprimer");
         JButton btnLogout = new JButton("Logout");
         buttonPanel.add(btnRefresh);
+        buttonPanel.add(btnSearch);
         buttonPanel.add(btnCreate);
         buttonPanel.add(btnAddPatient);
         buttonPanel.add(btnModify);
         buttonPanel.add(btnDelete);
         buttonPanel.add(btnLogout);
         btnRefresh.addActionListener(e -> loadConsultations());
+        btnSearch.addActionListener(e -> searchConsultations());
         btnCreate.addActionListener(e -> createConsultation());
         btnAddPatient.addActionListener(e -> addPatient());
         btnModify.addActionListener(e -> modifyConsultation());
@@ -79,6 +82,44 @@ public class MainFrame extends JFrame {
             } catch (Exception ex) {
                 SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(this,
                         "Erreur lors du chargement des consultations: " + ex.getMessage(),
+                        "Erreur", JOptionPane.ERROR_MESSAGE));
+            }
+        }).start();
+    }
+
+    private void searchConsultations() {
+        ConsultationSearchDialog dialog = new ConsultationSearchDialog(this);
+        dialog.setVisible(true);
+
+        if (!dialog.isConfirmed()) return;
+
+        Integer patientId = dialog.getPatientId();
+        LocalDate fromDate = dialog.getFromDate();
+        LocalDate toDate = dialog.getToDate();
+
+        new Thread(() -> {
+            try {
+                ReponseTraitee resp = networkManager.sendRequest(
+                    new RequeteSearchConsultations(doctor.getId(), patientId, fromDate, toDate)
+                );
+                if (resp.isSuccess()) {
+                    List<Consultation> list = (List<Consultation>) resp.getData();
+                    SwingUtilities.invokeLater(() -> {
+                        tableModel.setConsultations(list);
+                        // Afficher un message avec le nombre de résultats
+                        String msg = list.isEmpty()
+                            ? "Aucune consultation trouvée avec ces critères."
+                            : list.size() + " consultation(s) trouvée(s).";
+                        JOptionPane.showMessageDialog(this, msg, "Résultats de la recherche",
+                            JOptionPane.INFORMATION_MESSAGE);
+                    });
+                } else {
+                    SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(this, resp.getMessage(),
+                            "Erreur", JOptionPane.ERROR_MESSAGE));
+                }
+            } catch (Exception ex) {
+                SwingUtilities.invokeLater(() -> JOptionPane.showMessageDialog(this,
+                        "Erreur lors de la recherche des consultations: " + ex.getMessage(),
                         "Erreur", JOptionPane.ERROR_MESSAGE));
             }
         }).start();

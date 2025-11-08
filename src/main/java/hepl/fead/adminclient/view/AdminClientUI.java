@@ -1,5 +1,6 @@
 package hepl.fead.adminclient.view;
 
+import com.formdev.flatlaf.FlatClientProperties;
 import hepl.fead.adminclient.model.ClientInfo;
 import hepl.fead.adminclient.config.AdminClientConfig;
 
@@ -33,24 +34,36 @@ public class AdminClientUI extends JFrame {
      * Initialise tous les composants de l'interface
      */
     private void initializeUI() {
+        // Style moderne
+        UIManager.put("Component.arc", 12);
+        UIManager.put("Button.arc", 12);
+        UIManager.put("Component.focusWidth", 0);
+        UIManager.put("ScrollBar.showButtons", false);
+        UIManager.put("Table.showHorizontalLines", true);
+        UIManager.put("Table.showVerticalLines", true);
+
         setTitle(AdminClientConfig.WINDOW_TITLE);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setSize(AdminClientConfig.WINDOW_WIDTH, AdminClientConfig.WINDOW_HEIGHT);
         setLocationRelativeTo(null); // Centre la fenêtre
         
         // Configuration du layout
-        setLayout(new BorderLayout());
-        
+        setLayout(new BorderLayout(10, 10));
+
         // Création des composants
         createTable();
         createButtons();
         createStatusLabel();
         
-        // Ajout des composants à la fenêtre
-        add(scrollPane, BorderLayout.CENTER);
-        add(createButtonPanel(), BorderLayout.SOUTH);
-        add(statusLabel, BorderLayout.NORTH);
-        
+        // Panel principal avec marges
+        JPanel mainPanel = new JPanel(new BorderLayout(10, 10));
+        mainPanel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
+        mainPanel.add(statusLabel, BorderLayout.NORTH);
+        mainPanel.add(scrollPane, BorderLayout.CENTER);
+        mainPanel.add(createButtonPanel(), BorderLayout.SOUTH);
+
+        add(mainPanel);
+
         // Configuration initiale
         updateConnectionState(false); // État déconnecté par défaut
     }
@@ -72,14 +85,26 @@ public class AdminClientUI extends JFrame {
         clientTable.setSelectionMode(ListSelectionModel.SINGLE_SELECTION);
         clientTable.setRowHeight(AdminClientConfig.TABLE_ROW_HEIGHT);
         
+        // Style moderne pour la table
+        clientTable.putClientProperty(FlatClientProperties.STYLE,
+            "rowHeight:32; " +
+            "selectionBackground:@accentColor; " +
+            "selectionForeground:@foreground;");
+
+        // En-têtes de table plus élégants
+        clientTable.getTableHeader().putClientProperty(FlatClientProperties.STYLE,
+            "height:36; " +
+            "font:bold;");
+
         // Configuration des largeurs de colonnes
         clientTable.getColumnModel().getColumn(0).setPreferredWidth(120); // IP
         clientTable.getColumnModel().getColumn(1).setPreferredWidth(100); // Nom
         clientTable.getColumnModel().getColumn(2).setPreferredWidth(100); // Prénom
         clientTable.getColumnModel().getColumn(3).setPreferredWidth(80);  // ID
         
-        // Création du scroll pane
+        // Création du scroll pane avec style moderne
         scrollPane = new JScrollPane(clientTable);
+        scrollPane.setBorder(BorderFactory.createEmptyBorder());
         scrollPane.setVerticalScrollBarPolicy(JScrollPane.VERTICAL_SCROLLBAR_AS_NEEDED);
         scrollPane.setHorizontalScrollBarPolicy(JScrollPane.HORIZONTAL_SCROLLBAR_AS_NEEDED);
     }
@@ -90,19 +115,22 @@ public class AdminClientUI extends JFrame {
     private void createButtons() {
         // Bouton de connexion
         connectButton = new JButton(AdminClientConfig.BUTTON_CONNECT_TEXT);
-        connectButton.setFont(new Font(AdminClientConfig.FONT_NAME, Font.PLAIN, AdminClientConfig.BUTTON_FONT_SIZE));
-        connectButton.setPreferredSize(new Dimension(AdminClientConfig.BUTTON_WIDTH, AdminClientConfig.BUTTON_HEIGHT));
-        
+        connectButton.putClientProperty(FlatClientProperties.STYLE,
+            "font:+1; borderWidth:1; arc:999;");
+        connectButton.setPreferredSize(new Dimension(AdminClientConfig.BUTTON_WIDTH, 36));
+
         // Bouton de déconnexion
         disconnectButton = new JButton(AdminClientConfig.BUTTON_DISCONNECT_TEXT);
-        disconnectButton.setFont(new Font(AdminClientConfig.FONT_NAME, Font.PLAIN, AdminClientConfig.BUTTON_FONT_SIZE));
-        disconnectButton.setPreferredSize(new Dimension(AdminClientConfig.BUTTON_WIDTH, AdminClientConfig.BUTTON_HEIGHT));
+        disconnectButton.putClientProperty(FlatClientProperties.STYLE,
+            "font:+1; borderWidth:1; arc:999;");
+        disconnectButton.setPreferredSize(new Dimension(AdminClientConfig.BUTTON_WIDTH, 36));
         disconnectButton.setEnabled(false); // Désactivé par défaut
         
         // Bouton d'actualisation
         refreshButton = new JButton(AdminClientConfig.BUTTON_REFRESH_TEXT);
-        refreshButton.setFont(new Font(AdminClientConfig.FONT_NAME, Font.PLAIN, AdminClientConfig.BUTTON_FONT_SIZE));
-        refreshButton.setPreferredSize(new Dimension(AdminClientConfig.REFRESH_BUTTON_WIDTH, AdminClientConfig.BUTTON_HEIGHT));
+        refreshButton.putClientProperty(FlatClientProperties.STYLE,
+            "font:+1; borderWidth:1; arc:999;");
+        refreshButton.setPreferredSize(new Dimension(AdminClientConfig.REFRESH_BUTTON_WIDTH, 36));
         refreshButton.setEnabled(false); // Désactivé par défaut
     }
     
@@ -122,7 +150,7 @@ public class AdminClientUI extends JFrame {
      */
     private void createStatusLabel() {
         statusLabel = new JLabel("", JLabel.CENTER);
-        statusLabel.setFont(new Font(AdminClientConfig.FONT_NAME, Font.PLAIN, AdminClientConfig.STATUS_FONT_SIZE));
+        statusLabel.putClientProperty(FlatClientProperties.STYLE, "font:+1;");
         statusLabel.setBorder(BorderFactory.createEmptyBorder(10, 10, 10, 10));
     }
     

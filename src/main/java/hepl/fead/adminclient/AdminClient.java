@@ -1,5 +1,6 @@
 package hepl.fead.adminclient;
 
+import com.formdev.flatlaf.themes.FlatMacDarkLaf;
 import hepl.fead.adminclient.controller.AdminClientController;
 import hepl.fead.adminclient.view.AdminClientUI;
 import hepl.fead.adminclient.config.AdminClientConfig;
@@ -28,14 +29,13 @@ public class AdminClient {
      * Initialise l'application complète
      */
     private void initializeApplication() {
-        try {
-            // Configurer le Look and Feel système
-            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-        } catch (Exception e) {
-            System.err.println("Impossible de définir le Look and Feel système : " + e.getMessage());
-            // Continuer avec le Look and Feel par défaut
-        }
-        
+        // Configuration style macOS
+        System.setProperty("apple.laf.useScreenMenuBar", "true");
+        System.setProperty("apple.awt.application.name", "Admin Client");
+
+        // Initialiser FlatLaf en mode SOMBRE
+        FlatMacDarkLaf.setup();
+
         // Créer l'interface utilisateur
         ui = new AdminClientUI();
         
