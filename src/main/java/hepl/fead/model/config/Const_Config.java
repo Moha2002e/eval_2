@@ -6,7 +6,7 @@ public class Const_Config {
     // FICHIERS DE CONFIGURATION
     // ========================================================================
     
-    public static final String FICHIER_PROPERTIES = "database.properties";
+    public static final String FICHIER_PROPERTIES = "application.properties";
     
     // ========================================================================
     // MESSAGES D'ERREUR

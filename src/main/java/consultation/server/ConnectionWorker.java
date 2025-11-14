@@ -47,6 +47,7 @@ public class ConnectionWorker implements Runnable {
             while (running) {
                 try {
                     Object obj = ois.readObject();
+                    // Vérifier que l'objet est une requête valide
                     if (!(obj instanceof Requete)) {
                         System.err.println("Objet reçu inconnu: " + obj);
                         break;

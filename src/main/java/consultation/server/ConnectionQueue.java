@@ -9,6 +9,7 @@ public class ConnectionQueue {
         queue.addLast(socket);
         notify();
     }
+
     public synchronized Socket getConnection() throws InterruptedException {
         while (queue.isEmpty()) {
             wait();

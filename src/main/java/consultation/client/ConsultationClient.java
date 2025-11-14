@@ -15,7 +15,7 @@ public class ConsultationClient {
         final String host = "localhost";
         final int port = 9090;
 
-        SwingUtilities.invokeLater(() -> {
+        SwingUtilities.invokeLater(() -> { // Créer et afficher l'interface graphique dans le thread EDT
             LoginFrame frame = new LoginFrame(host, port);
             frame.setVisible(true);
         });

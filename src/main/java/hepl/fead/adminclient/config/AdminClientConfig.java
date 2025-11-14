@@ -12,11 +12,13 @@ public class AdminClientConfig {
     
     /**
      * Adresse IP par défaut du serveur C
+     * IMPORTANT: Modifiez cette valeur avec l'IP réelle de votre VM
+     * Pour tester en local, utilisez "localhost" ou "127.0.0.1"
      */
-    public static final String DEFAULT_SERVER_HOST = "192.168.0.16";
-    
+    public static final String DEFAULT_SERVER_HOST = "localhost";
+
     /**
-     * Port par défaut du serveur C
+     * Port par défaut du serveur C (protocole ACBP pour l'admin)
      */
     public static final int DEFAULT_SERVER_PORT = 8081;
     
@@ -25,15 +27,15 @@ public class AdminClientConfig {
     // ==========================================
     
     /**
-     * Timeout de connexion en millisecondes (10 secondes)
+     * Timeout de connexion en millisecondes (15 secondes pour réseaux lents/VM)
      */
-    public static final int CONNECTION_TIMEOUT = 5000;
-    
+    public static final int CONNECTION_TIMEOUT = 15000;
+
     /**
      * Timeout de lecture en millisecondes (30 secondes)
      */
-    public static final int READ_TIMEOUT = 3000;
-    
+    public static final int READ_TIMEOUT = 30000;
+
     // ==========================================
     // COMMANDES PROTOCOLE
     // ==========================================

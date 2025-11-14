@@ -91,8 +91,7 @@ public class AdminClientController {
         // Désactiver le bouton pendant la requête
         ui.setRefreshButtonEnabled(false);
         ui.setConnectionStatus(AdminClientConfig.STATUS_REFRESHING);
-        
-        // Exécuter la requête dans un thread séparé pour éviter le blocage de l'UI
+
         SwingUtilities.invokeLater(() -> {
             try {
                 List<ClientInfo> clients = fetchClientListFromServer();
@@ -115,15 +114,52 @@ public class AdminClientController {
      */
     private void testConnection() throws Exception {
         Socket socket = null;
+        System.out.println("═══════════════════════════════════════════════════════════");
+        System.out.println("🔌 TEST DE CONNEXION AU SERVEUR C");
+        System.out.println("═══════════════════════════════════════════════════════════");
+        System.out.println("📍 Hôte    : " + serverHost);
+        System.out.println("🔌 Port    : " + serverPort);
+        System.out.println("⏱️  Timeout : " + AdminClientConfig.CONNECTION_TIMEOUT + " ms");
+        System.out.println("───────────────────────────────────────────────────────────");
+
         try {
             socket = new Socket();
+            System.out.println("⏳ Tentative de connexion en cours...");
+            long startTime = System.currentTimeMillis();
             socket.connect(new java.net.InetSocketAddress(serverHost, serverPort), AdminClientConfig.CONNECTION_TIMEOUT);
+            long duration = System.currentTimeMillis() - startTime;
+            System.out.println("✅ Connexion établie avec succès en " + duration + " ms");
             socket.close();
+            System.out.println("═══════════════════════════════════════════════════════════");
         } catch (SocketTimeoutException e) {
+            System.err.println("❌ TIMEOUT : Le serveur n'a pas répondu dans le délai imparti");
+            System.err.println("───────────────────────────────────────────────────────────");
+            System.err.println("💡 Vérifiez que :");
+            System.err.println("   1. Le serveur C est bien démarré sur " + serverHost + ":" + serverPort);
+            System.err.println("   2. L'adresse IP " + serverHost + " est correcte");
+            System.err.println("   3. Le port " + serverPort + " n'est pas bloqué par un firewall");
+            System.err.println("   4. Vous pouvez pinguer l'adresse : ping " + serverHost);
+            System.err.println("═══════════════════════════════════════════════════════════");
             throw new Exception(String.format(AdminClientConfig.ERROR_CONNECTION_TIMEOUT, AdminClientConfig.CONNECTION_TIMEOUT));
         } catch (java.net.ConnectException e) {
+            System.err.println("❌ CONNEXION REFUSÉE : " + e.getMessage());
+            System.err.println("───────────────────────────────────────────────────────────");
+            System.err.println("💡 Causes possibles :");
+            System.err.println("   1. Le serveur C n'est PAS démarré");
+            System.err.println("   2. Le serveur écoute sur un autre port");
+            System.err.println("   3. L'adresse IP est incorrecte");
+            System.err.println("═══════════════════════════════════════════════════════════");
             throw new Exception(String.format(AdminClientConfig.ERROR_CONNECTION_REFUSED, serverHost, serverPort));
+        } catch (java.net.UnknownHostException e) {
+            System.err.println("❌ HÔTE INCONNU : " + serverHost);
+            System.err.println("───────────────────────────────────────────────────────────");
+            System.err.println("💡 L'adresse IP ou le nom d'hôte est invalide");
+            System.err.println("   Vérifiez l'orthographe et que le serveur existe");
+            System.err.println("═══════════════════════════════════════════════════════════");
+            throw new Exception("Hôte inconnu : " + serverHost);
         } catch (IOException e) {
+            System.err.println("❌ ERREUR I/O : " + e.getMessage());
+            System.err.println("═══════════════════════════════════════════════════════════");
             throw new Exception(String.format(AdminClientConfig.ERROR_COMMUNICATION, e.getMessage()));
         } finally {
             if (socket != null && !socket.isClosed()) {

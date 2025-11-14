@@ -2,7 +2,7 @@ package consultation.server;
 
 public class ConsultationServerLauncher {
     public static void main(String[] args) {
-        String configFile = "./src/main/resources/server.properties";
+        String configFile = "./src/main/resources/application.properties";
         if (args.length > 0) {
             configFile = args[0];
         }

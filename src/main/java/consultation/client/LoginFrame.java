@@ -101,6 +101,7 @@ public class LoginFrame extends JFrame {
         setBusy(true);
 
         // SwingWorker pour ne pas bloquer l'EDT
+        // il sert a faire du traitement en arriere plan
         new SwingWorker<ReponseTraitee, Void>() {
             private Exception error;
 
@@ -114,7 +115,7 @@ public class LoginFrame extends JFrame {
                     return null;
                 }
             }
-
+            // il sert a faire du traitement une fois le traitement en arriere plan terminer
             @Override
             protected void done() {
                 setBusy(false);

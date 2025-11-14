@@ -9,6 +9,7 @@ import consultation.server.protocol.CAPProtocol;
 public class ClientThreadPool {
     private final int poolSize;
     private final ConnectionQueue queue;
+    // supplier => c'est une fabrique de protocoles
     private final Supplier<CAPProtocol> protocolFactory;
     private final List<ConnectionWorker> workers;
     private volatile boolean running;
@@ -21,6 +22,7 @@ public class ClientThreadPool {
     public void start() {
         running = true;
         for (int i = 0; i < poolSize; i++) {
+            // Chaque worker a sa propre instance de protocole
             ConnectionWorker worker = new ConnectionWorker(queue, protocolFactory.get());
             workers.add(worker);
             Thread t = new Thread(worker, "ClientWorker-" + i);
