@@ -14,11 +14,7 @@ public class ConnectBD {
     private static boolean databaseInitialized = false;
 
     public static Connection getConnection() {
-        // Initialiser la base de données au premier appel
-        if (!databaseInitialized) {
-            DatabaseInitializer.initialize();
-            databaseInitialized = true;
-        }
+
 
         if (conn == null) {
             try {

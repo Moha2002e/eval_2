@@ -10,6 +10,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -51,6 +52,8 @@ public class ConsultationDAO {
             }
             rs.close();
             ps.close();
+
+
         }catch(Exception e){
             Logger.getLogger(ConsultationDAO.class.getName()).warning(e.getMessage());
         }
@@ -124,6 +127,8 @@ public class ConsultationDAO {
            }
            rs.close();
            ps.close();
+
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -135,8 +140,8 @@ public class ConsultationDAO {
     /**
      * Search consultations by ids and date range. Used by server protocol.
      */
-    public java.util.List<Consultation> searchConsultations(Integer doctorId, Integer patientId, java.time.LocalDate fromDate, java.time.LocalDate toDate) {
-        java.util.List<Consultation> result = new java.util.ArrayList<>();
+    public List<Consultation> searchConsultations(Integer doctorId, Integer patientId, java.time.LocalDate fromDate, java.time.LocalDate toDate) {
+        List<Consultation> result = new java.util.ArrayList<>();
         try {
         StringBuilder query = new StringBuilder("SELECT c.*, p.first_name AS p_first_name, p.last_name AS p_last_name, p.birth_date AS p_birth_date FROM consultations c " +
             "LEFT JOIN patient p ON c.patient_id = p.id " +
@@ -179,6 +184,8 @@ public class ConsultationDAO {
             }
             rs.close();
             ps.close();
+
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -245,34 +252,14 @@ public class ConsultationDAO {
                     consultation.setId((int) rs.getLong(1));
                     rs.close();
                     pStmt.close();
+
                 }
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
     }
-    public void delete(Consultation consultation){
-        if(consultation!=null && consultation.getId()!=null){
-            this.delete(consultation.getId());
-        }
-    }
-    public void delete (Integer id){
-        if(id !=null){
-            try {
-                String query = "DELETE FROM consultations WHERE id = ?";
-                PreparedStatement statement = ConnectBD.getConnection().prepareStatement(query);
-                statement.setInt(1, id);
-                statement.executeUpdate();
-                statement.close();
-            } catch (SQLException e) {
-                throw new RuntimeException(e);
-            }
-        }
-    }
 
-    /**
-     * Delete a consultation by id and return true if a row was deleted.
-     */
     public boolean deleteConsultation(int id) {
         if (id <= 0) return false;
         try {

@@ -9,6 +9,8 @@ import java.time.LocalTime;
 import java.util.List;
 
 public class RequeteAddConsultation implements Requete {
+    private static final long serialVersionUID = 1L;
+    
     private final int doctorId;
     private final LocalDate date;
     private final LocalTime time;

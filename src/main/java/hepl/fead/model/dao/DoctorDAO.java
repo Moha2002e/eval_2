@@ -43,6 +43,7 @@ public class DoctorDAO {
 
             rs.close();
             ps.close();
+
         } catch (SQLException e) {
             Logger.getLogger(DoctorDAO.class.getName()).warning(e.getMessage());
         }
@@ -101,6 +102,7 @@ public class DoctorDAO {
 
             rs.close();
             ps.close();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -195,6 +197,7 @@ public class DoctorDAO {
 
             rs.close();
             ps.close();
+
         } catch (SQLException e) {
             Logger.getLogger(DoctorDAO.class.getName()).warning(e.getMessage());
         }

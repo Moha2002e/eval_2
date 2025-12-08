@@ -36,11 +36,13 @@ public class SpecialtyDAO {
                 speciality.setName(rs.getString("name"));
                 rs.close();
                 ps.close();
+
                 return speciality;
             }
 
             rs.close();
             ps.close();
+
         } catch (SQLException e) {
             Logger.getLogger(SpecialtyDAO.class.getName()).warning(e.getMessage());
         }
@@ -84,6 +86,7 @@ public class SpecialtyDAO {
 
             rs.close();
             ps.close();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -116,6 +119,7 @@ public class SpecialtyDAO {
                 }
                 rs.close();
                 ps.close();
+
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

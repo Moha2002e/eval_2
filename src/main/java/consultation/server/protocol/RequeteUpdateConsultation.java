@@ -8,6 +8,8 @@ import java.time.LocalTime;
 import hepl.fead.model.entity.Consultation;
 
 public class RequeteUpdateConsultation implements Requete {
+    private static final long serialVersionUID = 1L;
+    
     private final int consultationId;
     private final LocalDate newDate;
     private final LocalTime newTime;

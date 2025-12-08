@@ -38,11 +38,13 @@ public class PatientDAO {
                 patient.setBirth_date(rs.getString("birth_date"));
                 rs.close();
                 ps.close();
+
                 return patient;
             }
 
             rs.close();
             ps.close();
+
         } catch (SQLException e) {
             Logger.getLogger(PatientDAO.class.getName()).warning(e.getMessage());
         }
@@ -106,6 +108,7 @@ public class PatientDAO {
 
             rs.close();
             ps.close();
+
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -142,6 +145,7 @@ public class PatientDAO {
                 }
                 rs.close();
                 ps.close();
+
             }
         } catch (SQLException e) {
             throw new RuntimeException(e);

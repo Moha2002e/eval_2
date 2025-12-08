@@ -44,9 +44,22 @@ public class ConnectionWorker implements Runnable {
     private void handleClient(Socket socket) {
         try (ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
              ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
+            
+            oos.flush(); // Important : flush avant de commencer
+            
             while (running) {
                 try {
                     Object obj = ois.readObject();
+                    
+                    // Afficher le contenu de la requête reçue
+                    System.out.println("════════════════════════════════════════");
+                    System.out.println("📥 REQUÊTE REÇUE:");
+                    System.out.println("   Type: " + obj.getClass().getSimpleName());
+                    System.out.println("   Contenu: " + obj);
+                    System.out.println("   Client: " + socket.getRemoteSocketAddress());
+                    System.out.println("════════════════════════════════════════");
+                    System.out.println();
+                    
                     // Vérifier que l'objet est une requête valide
                     if (!(obj instanceof Requete)) {
                         System.err.println("Objet reçu inconnu: " + obj);
@@ -54,17 +67,28 @@ public class ConnectionWorker implements Runnable {
                     }
                     Requete req = (Requete) obj;
                     ReponseTraitee resp = protocol.traiter(req);
+                    
+                    // Afficher le contenu de la réponse envoyée
+                    System.out.println("════════════════════════════════════════");
+                    System.out.println("📤 RÉPONSE ENVOYÉE:");
+                    System.out.println("   Type: ReponseTraitee");
+                    System.out.println("   Contenu: " + resp);
+                    System.out.println("════════════════════════════════════════");
+                    System.out.println();
+                    
                     oos.writeObject(resp);
                     oos.flush();
                     if (req.isLogout()) {
                         break;
                     }
                 } catch (EOFException e) {
+                    System.out.println(">>> Client déconnecté: " + socket.getRemoteSocketAddress());
                     break;
                 }
             }
         } catch (IOException | ClassNotFoundException e) {
             System.err.println("Erreur de communication avec le client: " + e.getMessage());
+            e.printStackTrace();
         }
     }
     public void stop() {

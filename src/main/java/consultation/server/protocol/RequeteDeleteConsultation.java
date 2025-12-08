@@ -4,6 +4,8 @@ import hepl.fead.model.dao.ConsultationDAO;
 import hepl.fead.model.dao.DAOFactory;
 
 public class RequeteDeleteConsultation implements Requete {
+    private static final long serialVersionUID = 1L;
+    
     private final int consultationId;
     public RequeteDeleteConsultation(int consultationId) {
         this.consultationId = consultationId;

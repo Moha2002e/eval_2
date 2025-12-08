@@ -3,6 +3,8 @@ package consultation.server.protocol;
 import java.io.Serializable;
 
 public class ReponseTraitee implements Serializable {
+    private static final long serialVersionUID = -5437301116538973669L;
+    
     private final boolean success;
     private final String message;
     private final Object data;

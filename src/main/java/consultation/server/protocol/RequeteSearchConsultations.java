@@ -8,6 +8,8 @@ import java.time.LocalDate;
 import java.util.List;
 
 public class RequeteSearchConsultations implements Requete {
+    private static final long serialVersionUID = 1L;
+    
     private final Integer doctorId;
     private final Integer patientId;
     private final LocalDate fromDate;

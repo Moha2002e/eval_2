@@ -6,6 +6,8 @@ import hepl.fead.model.entity.Doctor;
 
 
 public class RequeteLogin implements Requete {
+    private static final long serialVersionUID = -5968792954984562726L;
+    
     private final String login;
     private final String password;
     public RequeteLogin(String login, String password) {

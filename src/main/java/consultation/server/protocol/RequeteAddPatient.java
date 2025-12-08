@@ -4,6 +4,8 @@ import hepl.fead.model.dao.DAOFactory;
 import hepl.fead.model.dao.PatientDAO;
 
 public class RequeteAddPatient implements Requete {
+    private static final long serialVersionUID = 1L;
+    
     private final String nom;
     private final String prenom;
     public RequeteAddPatient(String nom, String prenom) {
