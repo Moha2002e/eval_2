@@ -42,16 +42,15 @@ public class ConnectionWorker implements Runnable {
         }
     }
     private void handleClient(Socket socket) {
-        try (ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream());
-             ObjectInputStream ois = new ObjectInputStream(socket.getInputStream())) {
+        try (ObjectInputStream ois = new ObjectInputStream(socket.getInputStream());
+             ObjectOutputStream oos = new ObjectOutputStream(socket.getOutputStream())) {
             
-            oos.flush(); // Important : flush avant de commencer
+            oos.flush();
             
             while (running) {
                 try {
                     Object obj = ois.readObject();
                     
-                    // Afficher le contenu de la requête reçue
                     System.out.println("════════════════════════════════════════");
                     System.out.println("📥 REQUÊTE REÇUE:");
                     System.out.println("   Type: " + obj.getClass().getSimpleName());
@@ -60,7 +59,6 @@ public class ConnectionWorker implements Runnable {
                     System.out.println("════════════════════════════════════════");
                     System.out.println();
                     
-                    // Vérifier que l'objet est une requête valide
                     if (!(obj instanceof Requete)) {
                         System.err.println("Objet reçu inconnu: " + obj);
                         break;
@@ -68,7 +66,6 @@ public class ConnectionWorker implements Runnable {
                     Requete req = (Requete) obj;
                     ReponseTraitee resp = protocol.traiter(req);
                     
-                    // Afficher le contenu de la réponse envoyée
                     System.out.println("════════════════════════════════════════");
                     System.out.println("📤 RÉPONSE ENVOYÉE:");
                     System.out.println("   Type: ReponseTraitee");
