@@ -43,6 +43,8 @@ public class ConsultationDAO {
                 consultation.setDate(rs.getString("date"));
                 consultation.setHour(rs.getString("hour"));
                 consultation.setReason(rs.getString("reason"));
+                // nouveau champ duree
+                consultation.setDuree(rs.getString("duree"));
                 consultation.setPatient_first_name(rs.getString("p_first_name"));
                 consultation.setPatient_last_name(rs.getString("p_last_name"));
                 consultation.setPatient_birth_date(rs.getString("p_birth_date"));
@@ -119,6 +121,8 @@ public class ConsultationDAO {
                consultation.setDate(rs.getString("date"));
                consultation.setHour(rs.getString("hour"));
                consultation.setReason(rs.getString("reason"));
+               // lire duree
+               consultation.setDuree(rs.getString("duree"));
                consultation.setPatient_first_name(rs.getString("p_first_name"));
                consultation.setPatient_last_name(rs.getString("p_last_name"));
                consultation.setPatient_birth_date(rs.getString("p_birth_date"));
@@ -177,6 +181,8 @@ public class ConsultationDAO {
                 consultation.setDate(rs.getString("date"));
                 consultation.setHour(rs.getString("hour"));
                 consultation.setReason(rs.getString("reason"));
+                    // lire duree
+                    consultation.setDuree(rs.getString("duree"));
                     consultation.setPatient_first_name(rs.getString("p_first_name"));
                     consultation.setPatient_last_name(rs.getString("p_last_name"));
                     consultation.setPatient_birth_date(rs.getString("p_birth_date"));
@@ -204,6 +210,7 @@ public class ConsultationDAO {
                             "patient_id = ?, " +
                             "date = ?, " +
                             "hour = ?, " +
+                            "duree = ?, " +
                             "reason = ? " +
                             "WHERE id = ?";
                     PreparedStatement pStmt = ConnectBD.getConnection().prepareStatement(query);
@@ -215,8 +222,10 @@ public class ConsultationDAO {
                     }
                     pStmt.setString(3, consultation.getDate());
                     pStmt.setString(4, consultation.getHour());
-                    pStmt.setString(5, consultation.getReason());
-                    pStmt.setInt(6, consultation.getId());
+                    // duree
+                    pStmt.setString(5, consultation.getDuree());
+                    pStmt.setString(6, consultation.getReason());
+                    pStmt.setInt(7, consultation.getId());
                     pStmt.executeUpdate();
                     pStmt.close();
                 }else {// Insert into
@@ -228,8 +237,10 @@ public class ConsultationDAO {
                             "patient_id, " +
                             "date, " +
                             "hour, " +
+                            "duree, " +
                             "reason " +
                             ") VALUES (" +
+                            "?, " +
                             "?, " +
                             "?, " +
                             "?, " +
@@ -245,7 +256,9 @@ public class ConsultationDAO {
                     }
                     pStmt.setString(3, consultation.getDate());
                     pStmt.setString(4, consultation.getHour());
-                    pStmt.setString(5, consultation.getReason());
+                    // duree
+                    pStmt.setString(5, consultation.getDuree());
+                    pStmt.setString(6, consultation.getReason());
                     pStmt.executeUpdate();
                     ResultSet rs = pStmt.getGeneratedKeys();
                     rs.next();

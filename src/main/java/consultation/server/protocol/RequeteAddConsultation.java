@@ -15,38 +15,48 @@ import java.util.List;
 public class RequeteAddConsultation implements Requete {
     private static final long serialVersionUID = 1L;
     private static final DateTimeFormatter TIME_FORMATTER = DateTimeFormatter.ofPattern("HH:mm");
-    
+
     private transient int doctorId;
     private transient LocalDate date;
     private transient LocalTime time;
     private transient int count;
     private transient String dateString;
     private transient String timeString;
+    private transient int duree;
+
     public RequeteAddConsultation(int doctorId, LocalDate date, LocalTime time, int count) {
+        this(doctorId, date, time, count, 0);
+    }
+
+    public RequeteAddConsultation(int doctorId, LocalDate date, LocalTime time, int count, int duree) {
         this.doctorId = doctorId;
         this.date = date;
         this.time = time;
         this.count = count;
         this.dateString = date != null ? date.toString() : null;
         this.timeString = time != null ? time.toString() : null;
+        this.duree = duree;
     }
-    
+
     private void writeObject(ObjectOutputStream out) throws IOException {
         String dateStr = dateString != null ? dateString : (date != null ? date.toString() : null);
         String timeStr = timeString != null ? timeString : (time != null ? time.toString() : null);
         out.writeInt(doctorId);
+        out.writeInt(duree);
         out.writeInt(count);
         out.writeObject(dateStr);
         out.writeObject(timeStr);
     }
-    
+
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         this.doctorId = in.readInt();
+        this.duree = in.readInt();
         this.count = in.readInt();
         String dateStr = (String) in.readObject();
         String timeStr = (String) in.readObject();
         this.dateString = dateStr;
         this.timeString = timeStr;
+
         if (dateStr != null && !dateStr.isEmpty()) {
             try {
                 this.date = LocalDate.parse(dateStr);
@@ -70,6 +80,7 @@ public class RequeteAddConsultation implements Requete {
             throw new IOException("timeString ne peut pas être null ou vide");
         }
     }
+
     @Override
     public ReponseTraitee traite(DAOFactory daoFactory) throws Exception {
         ConsultationDAO consultationDAO = daoFactory.getConsultationDAO();
@@ -86,6 +97,9 @@ public class RequeteAddConsultation implements Requete {
             c.setHour(slot.toString());
             c.setReason("");
             c.setPatient_id(null);
+            // appliquer duree si fournie
+            if (this.duree > 0)
+                c.setDuree(String.valueOf(this.duree));
             consultationDAO.save(c);
             created.add(c);
             slot = slot.plusMinutes(30);

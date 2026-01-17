@@ -123,7 +123,7 @@ public class Const_BD {
                 patient_id INT NOT NULL,
                 doctor_id INT NOT NULL,
                 date DATE NOT NULL,
-                hour TIME,
+                hour TIME,                duree VARCHAR(50),
                 reason TEXT,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,

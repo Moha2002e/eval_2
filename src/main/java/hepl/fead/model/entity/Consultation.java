@@ -9,6 +9,7 @@ public class Consultation implements Entity {
     private Integer patient_id ;
     private String date ;
     private String hour ;
+    private String duree ;
     private String reason ;
     // Additional patient info for UI convenience
     private String patient_first_name;
@@ -18,13 +19,14 @@ public class Consultation implements Entity {
     public Consultation() {
 
     }
-    public Consultation(Integer patient_id, Integer id, Integer doctor_id, String date, String reason, String hour) {
+    public Consultation(Integer patient_id, Integer id, Integer doctor_id, String date, String reason, String hour, String duree) {
         this.patient_id = patient_id;
         this.id = id;
         this.doctor_id = doctor_id;
         this.date = date;
         this.reason = reason;
         this.hour = hour;
+        this.duree = duree;
     }
 
     public Integer getId() {
@@ -45,6 +47,9 @@ public class Consultation implements Entity {
 
     public String getHour() {
         return hour;
+    }
+    public String getDuree(){
+        return duree;
     }
 
     public String getReason() {
@@ -69,6 +74,9 @@ public class Consultation implements Entity {
 
     public void setDoctor_id(Integer doctor_id) {
         this.doctor_id = doctor_id;
+    }
+    public void setDuree(String duree){
+        this.duree = duree;
     }
 
     public void setPatient_id(Integer patient_id) {
@@ -108,6 +116,7 @@ public class Consultation implements Entity {
                 ", date='" + date + '\'' +
                 ", hour='" + hour + '\'' +
                 ", reason='" + reason + '\'' +
+                ", duree ='"+duree+'\''+
                 '}';
     }
 

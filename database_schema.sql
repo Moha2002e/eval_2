@@ -1,4 +1,4 @@
--- ========================================================================
+timeEditText2-- ========================================================================
 -- SCHÉMA DE BASE DE DONNÉES - SYSTÈME DE GESTION MÉDICALE
 -- ========================================================================
 -- Projet : Système de gestion de consultations médicales
@@ -85,6 +85,7 @@ CREATE TABLE IF NOT EXISTS consultations (
     doctor_id INT NOT NULL COMMENT 'ID du médecin',
     date DATE NOT NULL COMMENT 'Date de la consultation',
     hour TIME COMMENT 'Heure de la consultation',
+    duree VARCHAR(50) COMMENT 'Durée de la consultation (ex: 30m, 45m)',
     reason TEXT COMMENT 'Motif de la consultation',
     created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP COMMENT 'Date de création',
     updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT 'Date de dernière modification',
@@ -147,12 +148,12 @@ ON DUPLICATE KEY UPDATE first_name = VALUES(first_name);
 -- DONNÉES INITIALES - CONSULTATIONS DE TEST
 -- ========================================================================
 
-INSERT INTO consultations (patient_id, doctor_id, date, hour, reason) VALUES 
-(1, 1, '2024-01-15', '09:00:00', 'Contrôle cardiaque'),
-(2, 2, '2024-01-15', '10:30:00', 'Consultation pédiatrique'),
-(3, 3, '2024-01-16', '14:00:00', 'Consultation générale'),
-(4, 1, '2024-01-16', '15:30:00', 'Examen cardiologique'),
-(5, 4, '2024-01-17', '11:00:00', 'Problème de peau')
+INSERT INTO consultations (patient_id, doctor_id, date, hour, duree, reason) VALUES
+(1, 1, '2024-01-15', '09:00:00', '30m', 'Contrôle cardiaque'),
+(2, 2, '2024-01-15', '10:30:00', '30m', 'Consultation pédiatrique'),
+(3, 3, '2024-01-16', '14:00:00', '30m', 'Consultation générale'),
+(4, 1, '2024-01-16', '15:30:00', '30m', 'Examen cardiologique'),
+(5, 4, '2024-01-17', '11:00:00', '30m', 'Problème de peau')
 ON DUPLICATE KEY UPDATE reason = VALUES(reason);
 
 -- ========================================================================
@@ -165,6 +166,7 @@ SELECT
     c.id,
     c.date,
     c.hour,
+    c.duree,
     c.reason,
     CONCAT(p.first_name, ' ', p.last_name) AS patient_name,
     CONCAT(d.first_name, ' ', d.last_name) AS doctor_name,
@@ -198,6 +200,7 @@ BEGIN
     SELECT 
         c.id,
         c.hour,
+        c.duree,
         c.reason,
         CONCAT(p.first_name, ' ', p.last_name) AS patient_name,
         p.birth_date
@@ -214,6 +217,7 @@ BEGIN
         c.id,
         c.date,
         c.hour,
+        c.duree,
         c.reason,
         CONCAT(d.first_name, ' ', d.last_name) AS doctor_name,
         s.name AS specialty_name
@@ -239,8 +243,8 @@ CREATE TRIGGER consultations_audit_update
 BEGIN
     INSERT INTO audit_log (table_name, action, record_id, old_values, new_values, timestamp)
     VALUES ('consultations', 'UPDATE', NEW.id, 
-            JSON_OBJECT('date', OLD.date, 'hour', OLD.hour, 'reason', OLD.reason),
-            JSON_OBJECT('date', NEW.date, 'hour', NEW.hour, 'reason', NEW.reason),
+            JSON_OBJECT('date', OLD.date, 'hour', OLD.hour, 'duree', OLD.duree, 'reason', OLD.reason),
+            JSON_OBJECT('date', NEW.date, 'hour', NEW.hour, 'duree', NEW.duree, 'reason', NEW.reason),
             NOW());
 END //
 
